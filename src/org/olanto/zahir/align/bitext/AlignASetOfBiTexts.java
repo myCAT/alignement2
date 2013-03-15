@@ -1,22 +1,24 @@
-/**********
-    Copyright © 2010-2012 Olanto Foundation Geneva
-
-   This file is part of myCAT.
-
-   myCAT is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    myCAT is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    See the GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with myCAT.  If not, see <http://www.gnu.org/licenses/>.
-
-**********/
+/**
+ * ********
+ * Copyright © 2010-2012 Olanto Foundation Geneva
+ *
+ * This file is part of myCAT.
+ *
+ * myCAT is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * myCAT is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with myCAT. If not, see <http://www.gnu.org/licenses/>.
+ *
+ *********
+ */
 package org.olanto.zahir.align.bitext;
 
 import org.olanto.idxvli.IdxStructure;
@@ -47,13 +49,13 @@ public class AlignASetOfBiTexts {
     static String TMX;
     static long totcounttested;
     static long count, start, totcountTMX;
-    static String SO,TA;
+    static String SO, TA;
     private static OutputStreamWriter out;
 
-    public AlignASetOfBiTexts(String _SO, String _TA,boolean _auto, boolean _verbose, IdxStructure _id, String _fromfile, String _tofile, String _encoding,
+    public AlignASetOfBiTexts(String _SO, String _TA, boolean _auto, boolean _verbose, IdxStructure _id, String _fromfile, String _tofile, String _encoding,
             float _limit, LexicalTranslation _s2t, String _TMX, boolean _writefile, String _EXT) {
-        SO=_SO;
-        TA=_TA;
+        SO = _SO;
+        TA = _TA;
         auto = _auto;
         verbose = _verbose;
         writefile = _writefile;
@@ -102,30 +104,36 @@ public class AlignASetOfBiTexts {
 
             String name = fileList.get(i);
             // System.out.println("align:" + i + " file:" + fromfile + "/" + name);
-            BiSentence bc = new BiSentence(
-                    auto, 10, 10,
-                    verbose,
-                    id,
-                    fromfile + "/" + name,
-                    tofile + "/" + name,
-                    "UTF-8",
-                    1000,
-                    3,
-                    s2t);
-            if (!bc.error) {
-                bc.buildCertainMap(TMX + "/" + name, SO, TA);
-                log(bc.getInformation());
-                updateCount(bc.counttested, bc.countTMX);
-                // System.out.println("align:"+i+" count:"+bc.countalign+" loop1:"+bc.countloop1);
+            BiSentence bc = null;
+            try {
+                bc = new BiSentence(
+                        auto, 10, 10,
+                        verbose,
+                        id,
+                        fromfile + "/" + name,
+                        tofile + "/" + name,
+                        "UTF-8",
+                        1000,
+                        3,
+                        s2t);
+                if (!bc.error) {
+                    bc.buildCertainMap(TMX + "/" + name, SO, TA);
+                    log(bc.getInformation());
+                    updateCount(bc.counttested, bc.countTMX);
+                    // System.out.println("align:"+i+" count:"+bc.countalign+" loop1:"+bc.countloop1);
+                }
+
+            } catch (Exception ex) {
+                msg("error for: " + fromfile+ "/" + name + " <-> " + tofile+ "/" + name);
             }
         }
     }
 
-    public synchronized void updateCount(long counttested,int countTMX) {
+    public synchronized void updateCount(long counttested, int countTMX) {
         totcounttested += counttested;
-        totcountTMX +=countTMX;
+        totcountTMX += countTMX;
     }
-  
+
     public synchronized void log(String s) {
         try {
             out.write(s + "\n");
@@ -145,7 +153,7 @@ public class AlignASetOfBiTexts {
 
     public void close() {
         try {
-            msg("totAlign:"+totcountTMX);
+            msg("totAlign:" + totcountTMX);
             out.close();
         } catch (IOException ex) {
             ex.printStackTrace();
