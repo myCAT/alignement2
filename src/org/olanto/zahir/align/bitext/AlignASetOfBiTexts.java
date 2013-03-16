@@ -42,7 +42,7 @@ public class AlignASetOfBiTexts {
     public int end;
     public int size;
     static boolean auto, verbose, writefile;
-    static IdxStructure id;
+  //  static IdxStructure id;
     static String fromfile, tofile, encoding, EXT;
     static float limit;
     static LexicalTranslation s2t;
@@ -52,15 +52,14 @@ public class AlignASetOfBiTexts {
     static String SO, TA;
     private static OutputStreamWriter out;
 
-    public AlignASetOfBiTexts(String _SO, String _TA, boolean _auto, boolean _verbose, IdxStructure _id, String _fromfile, String _tofile, String _encoding,
+    public AlignASetOfBiTexts(String _SO, String _TA, boolean _auto, boolean _verbose,  String _fromfile, String _tofile, String _encoding,
             float _limit, LexicalTranslation _s2t, String _TMX, boolean _writefile, String _EXT) {
         SO = _SO;
         TA = _TA;
         auto = _auto;
         verbose = _verbose;
         writefile = _writefile;
-        id = _id;
-        fromfile = _fromfile;
+         fromfile = _fromfile;
         tofile = _tofile;
         encoding = _encoding;
         limit = _limit;
@@ -105,11 +104,10 @@ public class AlignASetOfBiTexts {
             String name = fileList.get(i);
             // System.out.println("align:" + i + " file:" + fromfile + "/" + name);
             BiSentence bc = null;
-            try {
+//            try {
                 bc = new BiSentence(
                         auto, 10, 10,
                         verbose,
-                        id,
                         fromfile + "/" + name,
                         tofile + "/" + name,
                         "UTF-8",
@@ -123,10 +121,10 @@ public class AlignASetOfBiTexts {
                     // System.out.println("align:"+i+" count:"+bc.countalign+" loop1:"+bc.countloop1);
                 }
 
-            } catch (Exception ex) {
-                msg("error for: " + fromfile+ "/" + name + " <-> " + tofile+ "/" + name);
-            }
-        }
+//            } catch (Exception ex) {
+//                msg("error for: " + fromfile+ "/" + name + " <-> " + tofile+ "/" + name);
+//        }
+    }
     }
 
     public synchronized void updateCount(long counttested, int countTMX) {

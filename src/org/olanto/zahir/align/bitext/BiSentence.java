@@ -30,14 +30,10 @@ import org.olanto.zahir.align.WriteTMX;
 
 /**
  * Classe stockant la carte des positions entre deux traductions.
- * <p>author: Jacques Guyot
- * <p>copyright Jacques Guyot 2011
- * <p>
  * init -> add wordpos -> compact -> translate charpos
  */
 public class BiSentence {
 
-    public IdxStructure id;
     public String encoding;
     public int windows, windows2, minauto, autopct;
     public float ratiofromto, ratiotofrom;
@@ -67,8 +63,7 @@ public class BiSentence {
             boolean _auto,  // taille automatique de la fenêtre d'exploration
             int autopct,    // en pour cent de la taille du document (4%)
             int minauto,    // minimum taille en mode auto
-            boolean _verbose, 
-            IdxStructure id, 
+            boolean _verbose,
             String fromfile, 
             String tofile, 
             String encoding,
@@ -76,7 +71,6 @@ public class BiSentence {
             int windows2, // taille manuelle du deuxième passage
             LexicalTranslation _s2t) {
         verbose = _verbose;
-        this.id = id;
         this.fromfile = fromfile;
         this.tofile = tofile;
         this.windows = windows;

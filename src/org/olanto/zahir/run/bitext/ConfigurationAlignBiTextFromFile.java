@@ -75,7 +75,7 @@ public class ConfigurationAlignBiTextFromFile implements BiTextInit {
         // les directoire
         FOLDER_SEGMENTED = prop.getProperty("FOLDER_SEGMENTED", SenseOS.getMYCAT_HOME() + "/corpus/txt");
         FOLDER_TMX = prop.getProperty("FOLDER_TMX", SenseOS.getMYPREP_HOME() + "/TMX");
-         IDX_DONTINDEXTHIS = prop.getProperty("IDX_DONTINDEXTHIS", SenseOS.getMYCAT_HOME() + "/config/dontindexthiswords.txt");
+        IDX_DONTINDEXTHIS = prop.getProperty("IDX_DONTINDEXTHIS", SenseOS.getMYCAT_HOME() + "/config/dontindexthiswords.txt");
         LIST_OF_BITEXT_LANG = prop.getProperty("LIST_OF_BITEXT_LANG", "XXYY XXZZ");
 
         Pattern ps = Pattern.compile("[\\s]");  // le blanc

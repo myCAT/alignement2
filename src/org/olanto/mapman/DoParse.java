@@ -22,7 +22,7 @@ package org.olanto.mapman;
 
 import java.io.Reader;
 import java.io.StringReader;
-import org.olanto.idxvli.IdxStructure;
+//import org.olanto.idxvli.IdxStructure;
 import static org.olanto.mapman.MapArchiveConstant.WORD_DEFINITION;
 import static org.olanto.mapman.MapArchiveConstant.WORD_MINLENGTH;
 import static org.olanto.mapman.MapArchiveConstant.SOF;
@@ -46,7 +46,7 @@ public class DoParse {
     // alors il faut protï¿½ger le parsing
     private ParseSetOfWords DontIndexThis;
     public int nbToken = 0;
-    public IdxStructure glue;
+//    public IdxStructure glue;
     /** variable contenant le symbole courant*/
     public  StringBuilder cw = new StringBuilder();
     /** la source de caractï¿½re ï¿½ parser */
