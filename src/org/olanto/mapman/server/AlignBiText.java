@@ -28,6 +28,8 @@ import org.olanto.idxvli.server.IndexService_MyCat;
 
 /**
  * classe pour l'alignement de bitext.
+ * 
+ * add possibility to insert a CR between paragraph
  *
  */
 public class AlignBiText {
