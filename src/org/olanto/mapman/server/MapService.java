@@ -96,4 +96,9 @@ public interface MapService extends Remote {
      * @param lang lanque (pivot/cette langue)
      */
     public boolean existMap(int docid, String langfrom, String langto) throws RemoteException;
+   
+    /** skip line ?.
+     * 
+     */
+    public boolean isSkipLine() throws RemoteException;
 }

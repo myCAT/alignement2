@@ -142,7 +142,11 @@ public class MapArchiveConstant {//extends org.olanto.idxvli.IdxConstant {
      * langues des maps
      */
     public static String LIST_OF_MAP_LANG = "XX YY";
-    /**
+     /**
+     * Skip a line between paragraphs
+     */
+    public static boolean SKIP_LINE = false;
+   /**
      * compression des object storage
      */
     public static Compression MAP_COMPRESSION = Compression.YES;

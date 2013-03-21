@@ -26,6 +26,7 @@ import static org.olanto.util.Messages.*;
 import java.util.concurrent.locks.*;
 import org.olanto.mapman.MapArchiveInit;
 import org.olanto.mapman.MapArchiveStructure;
+import static org.olanto.mapman.MapArchiveConstant.*;
 
 /**
  *  service de Map d'alignement.
@@ -192,4 +193,13 @@ public class MapService_BASIC extends UnicastRemoteObject implements MapService 
         }
 
     }
+     /** skip line ?.
+     * 
+     */
+    public boolean isSkipLine() throws RemoteException{
+        return SKIP_LINE;
+        
+    }
+
+    
 }
