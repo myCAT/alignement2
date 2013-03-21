@@ -28,7 +28,7 @@ import org.olanto.idxvli.server.IndexService_MyCat;
 
 /**
  * classe pour l'alignement de bitext.
- * 
+ *
  * add possibility to insert a CR between paragraph
  *
  */
@@ -42,12 +42,13 @@ public class AlignBiText {
     static MapService ms;
     static String rootTxt;
     static int ncal;
+    static boolean skipLine;
 
     public AlignBiText(String fileso, String langso, String langta, String query, int w, int h) {
 
         // initialisisation en cas d'erreur
         System.out.println("file source:" + fileso);
-        if (fileso.contains("/Glossaries")&& fileso.contains("_"+langso)) { 
+        if (fileso.contains("/Glossaries") && fileso.contains("_" + langso)) {
             fileso = fileso.replace(langso + "/", "XX/");
             System.out.println("Glossaries -> new file source:" + fileso);
         }
@@ -79,6 +80,11 @@ public class AlignBiText {
         // tester la langue ....
         // chercher les documents
         fileso = rootTxt + "/" + fileso;
+        try {
+            skipLine = ms.isSkipLine(); // initialisation from parameter
+        } catch (RemoteException ex) {
+            Logger.getLogger(AlignBiText.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String filepivot = getNameOfDocForThisLang(fileso, "EN");
         String fileta = getNameOfDocForThisLang(fileso, langta);
         //System.out.println("fileso"+fileso+"\n"+"fileta"+fileta+"\n"+"filepivot"+filepivot);
@@ -103,6 +109,11 @@ public class AlignBiText {
             if (docpivot != -1) { // existe un docpivot
                 //System.out.println(" doc id :"+docso);
                 map = ms.getMap(docpivot, langso, langta);
+                if (skipLine) {
+                   // map.dump("before skip");
+                    map=map.skipLine();  // remap with empty line
+                  //map.dump("after skip");
+                }
             } else { // pas de docpivot
                 map = null;
             }
@@ -116,9 +127,16 @@ public class AlignBiText {
             Logger.getLogger(AlignBiText.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        dump();
 
     }
 
+    public void dump(){
+        source.dump("source");
+        target.dump("target");
+        map.dump("map");
+    }
+    
     public static String getNameOfDocForThisLang(String name, String Lang) {
         int lenRootTxt = rootTxt.length();
         return rootTxt + "/" + Lang + name.substring(lenRootTxt + 3);

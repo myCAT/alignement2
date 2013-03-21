@@ -1,23 +1,24 @@
-/**********
-    Copyright © 2010-2012 Olanto Foundation Geneva
-
-   This file is part of myCAT.
-
-   myCAT is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    myCAT is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    See the GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with myCAT.  If not, see <http://www.gnu.org/licenses/>.
-
-**********/
-
+/**
+ * ********
+ * Copyright © 2010-2012 Olanto Foundation Geneva
+ *
+ * This file is part of myCAT.
+ *
+ * myCAT is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * myCAT is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with myCAT. If not, see <http://www.gnu.org/licenses/>.
+ *
+ *********
+ */
 package org.olanto.mapman.server;
 
 import java.io.BufferedReader;
@@ -28,8 +29,8 @@ import static org.olanto.util.Messages.*;
 
 /**
  * Une classe pour stocker un document sous forme de phrase.
- * 
- * 
+ *
+ *
  */
 public class SegDoc {
 
@@ -42,10 +43,33 @@ public class SegDoc {
     public String lang;
     public String txt_encoding = "UTF-8";
 
+    public void dump(String s) {
+        System.out.println("--------------------------------------------");
+        System.out.println(s);
+        System.out.println("nblines:" + nblines);
+        System.out.println("lines.length:" + lines.length);
+        System.out.println("positions.lenght:" + positions.length);
+        System.out.println("Ncal:" + Ncal);
+        for (int i = 0; i < lines.length; i++) {
+            System.out.println("line " + i + ":" + lines[i]);
+        }
+        for (int i = 0; i < positions.length; i++) {
+            System.out.print("positions " + i + ":");
+            for (int j = 0; j < positions[i].length; j++) {
+                System.out.print(positions[i][j] + ", ");
+            }
+            System.out.println();
+        }
+    }
+
     public SegDoc(String fname, String lang) {
         uri = fname;
         this.lang = lang;
         content = file2String(fname, txt_encoding);
+        if (AlignBiText.skipLine) {
+            //msg("skipline");
+            content = content.replace("\n", "\n\n");
+        }
         if (content == null) {
             content = "file source:" + fname + " language:" + lang + "\n*** ERROR :no file\n";
         }
@@ -55,6 +79,7 @@ public class SegDoc {
         init(content);
     }
 
+    /** used to initialise a error msg*/
     public SegDoc(String fname, String fromstring, String lang) {
         uri = fname;
         this.lang = lang;
