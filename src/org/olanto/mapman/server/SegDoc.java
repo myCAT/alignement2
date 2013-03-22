@@ -36,7 +36,6 @@ public class SegDoc {
 
     public String[] lines;
     public int[][] positions;
-    public int Ncal;
     public int nblines;
     public String content;
     public String uri;
@@ -49,7 +48,6 @@ public class SegDoc {
         System.out.println("nblines:" + nblines);
         System.out.println("lines.length:" + lines.length);
         System.out.println("positions.lenght:" + positions.length);
-        System.out.println("Ncal:" + Ncal);
         for (int i = 0; i < lines.length; i++) {
             System.out.println("line " + i + ":" + lines[i]);
         }
@@ -85,7 +83,6 @@ public class SegDoc {
         this.lang = lang;
         content = fromstring;
         init(content);
-        Ncal = 0;
     }
 
     public void init(String document) {

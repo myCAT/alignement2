@@ -41,7 +41,6 @@ public class AlignBiText {
     static IndexService_MyCat is;
     static MapService ms;
     static String rootTxt;
-    static int ncal;
     static boolean skipLine;
 
     public AlignBiText(String fileso, String langso, String langta, String query, int w, int h) {
@@ -57,9 +56,7 @@ public class AlignBiText {
         target = new SegDoc("N/A", "file target:" + "N/A" + " language:" + langta + "\n\n", langta);
         map = new IntMap(3);
         source.positions = getLineStat(source.lines, w, h, source.content.length());
-        source.Ncal = ncal;
         target.positions = getLineStat(target.lines, w, h, target.content.length());
-        target.Ncal = ncal;
 
 
         if (is == null) {
@@ -94,7 +91,6 @@ public class AlignBiText {
             return; //stop processing
         }
         source.positions = getLineStat(source.lines, w, h, source.content.length());
-        source.Ncal = ncal;
         target = new SegDoc(fileta, langta);
         if (target.lines[1] != null && target.lines[1].startsWith("*** ERROR")) {
             System.out.println("no target file");
@@ -102,7 +98,6 @@ public class AlignBiText {
         }
 
         target.positions = getLineStat(target.lines, w, h, target.content.length());
-        target.Ncal = ncal;
         try {
             // chercher le numÃ©ro du doc pivot
             int docpivot = is.getDocId(filepivot);
@@ -145,7 +140,7 @@ public class AlignBiText {
 // Matrice (nombre de lignes, position du top, correction, position en pixel)
 
     public static int[][] getLineStat(String[] lines, int w, int h, int length) {
-        ncal = 0;
+        int ncal = 0;
         int[][] calc = new int[lines.length][5];
         if ((lines[0].length() / w) <= 1) {
             ncal++;
