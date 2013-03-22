@@ -110,9 +110,9 @@ public class AlignBiText {
                 //System.out.println(" doc id :"+docso);
                 map = ms.getMap(docpivot, langso, langta);
                 if (skipLine) {
-                   // map.dump("before skip");
-                    map=map.skipLine();  // remap with empty line
-                  //map.dump("after skip");
+                    // map.dump("before skip");
+                    map = map.skipLine();  // remap with empty line
+                    //map.dump("after skip");
                 }
             } else { // pas de docpivot
                 map = null;
@@ -127,16 +127,16 @@ public class AlignBiText {
             Logger.getLogger(AlignBiText.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        dump();
+       // dump();
 
     }
 
-    public void dump(){
+    public void dump() {
         source.dump("source");
         target.dump("target");
         map.dump("map");
     }
-    
+
     public static String getNameOfDocForThisLang(String name, String Lang) {
         int lenRootTxt = rootTxt.length();
         return rootTxt + "/" + Lang + name.substring(lenRootTxt + 3);
@@ -161,7 +161,11 @@ public class AlignBiText {
         int pos = 0, len = 0, corr = 0, lin1 = 0, lin = 0, j = 0, lin3 = 0, ln = 0;
 
         for (int i = 1; i < lines.length; i++) {
-            lin1 += (lines[i - 1].length() / w);
+            if (lines[i - 1].length() == 0) {
+                lin1++;
+            } else {
+                lin1 += (lines[i - 1].length() / w);
+            }
 
             lin3 = (lines[i - 1].length() / w);
             lin2 = (float) lines[i - 1].length() / (float) w;
