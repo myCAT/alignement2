@@ -63,8 +63,9 @@ public class SegDoc {
     public SegDoc(String fname, String lang) {
         uri = fname;
         this.lang = lang;
+//        System.out.println("Building from segdoc from file:" + fname);
         content = file2String(fname, txt_encoding);
-        if (AlignBiText.skipLine) {
+        if ((content != null) && (AlignBiText.skipLine)) {
             //msg("skipline");
             content = content.replace("\n", "\n\n");
         }
@@ -74,10 +75,13 @@ public class SegDoc {
         if (content.length() == 0) {
             content = "file source:" + fname + " language:" + lang + "\n*** ERROR :file is empty\n";
         }
+//        System.out.println("File Content:" + content);
         init(content);
     }
 
-    /** used to initialise a error msg*/
+    /**
+     * used to initialise a error msg
+     */
     public SegDoc(String fname, String fromstring, String lang) {
         uri = fname;
         this.lang = lang;
