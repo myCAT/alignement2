@@ -17,7 +17,7 @@ You should have received a copy of the GNU Affero General Public License
 along with myCAT.  If not, see <http://www.gnu.org/licenses/>.
 
  **********/
-package org.olanto.zahir.run.bitext;
+package org.olanto.zahir.run.comparable;
 
 import org.olanto.senseos.SenseOS;
 
@@ -25,7 +25,7 @@ import org.olanto.senseos.SenseOS;
  * Une classe pour déclarer des constantes de l'alignement bitext
  *
  */
-public class AlignBiTextConstant {
+public class AlignComparableConstant {
 
     public static final int NOT_FOUND = -1;
     /** un méga */
@@ -37,10 +37,10 @@ public class AlignBiTextConstant {
     /*************************************************************************************/
     /** path de la racine des fichiers communs */
     public static String FOLDER_SEGMENTED = SenseOS.getMYCAT_HOME() + "/corpus/txt";
-    public static String FOLDER_TMX = SenseOS.getMYPREP_HOME() + "/TMX";
+    public static String FOLDER_COMPARABLE_RESULT = SenseOS.getMYPREP_HOME() + "/COMP";
     public static String IDX_DONTINDEXTHIS = SenseOS.getMYCAT_HOME() + "/config/dontindexthiswords.txt";
-    public static String LIST_OF_BITEXT_LANG = "XXYY XXYYY";
-    public static String[] BITEXT;
+    public static String LIST_OF_COMPARABLE_LANG = "XXYY XXYYY";
+    public static String[] COMPARABLE;
     public static float MIN_DICT_LEVEL =0.1f;
 
     /*************************************************************************************/
@@ -49,9 +49,9 @@ public class AlignBiTextConstant {
                 "SEGMENTATION"
                 + "\nFILES"
                 + "\n    FOLDER_SGEMENTED: " + FOLDER_SEGMENTED
-                + "\n    FOLDER_TMX: " + FOLDER_TMX
+                + "\n    FOLDER_TMX: " + FOLDER_COMPARABLE_RESULT
                 + "\n    IDX_DONTINDEXTHIS: " + IDX_DONTINDEXTHIS
-                + "\n    LIST_OF_BITEXT_LANG: " + LIST_OF_BITEXT_LANG
+                + "\n    LIST_OF_BITEXT_LANG: " + LIST_OF_COMPARABLE_LANG
                 + "\n    MIN_DICT_LEVEL: " + MIN_DICT_LEVEL
                 + "\nVALUES");
     }

@@ -35,8 +35,7 @@ public class AlignASetOfComparables {
     public int begin;
     public int end;
     public int size;
-    static boolean auto, verbose, writefile;
-    static IdxStructure id;
+    static boolean  verbose, writefile;
     static String fromfile, tofile, encoding, EXT;
     static float limit;
     static LexicalTranslation s2t;
@@ -44,12 +43,18 @@ public class AlignASetOfComparables {
     static long totcounttested;
     static long count, start;
 
-    public AlignASetOfComparables(boolean _auto, boolean _verbose, IdxStructure _id, String _fromfile, String _tofile, String _encoding,
-            float _limit, LexicalTranslation _s2t, CollectAndSave _saveFile, boolean _writefile, String _EXT) {
-        auto = _auto;
+    public AlignASetOfComparables(
+            boolean _verbose,
+            String _fromfile,
+            String _tofile,
+            String _encoding,
+            float _limit,
+            LexicalTranslation _s2t,
+            CollectAndSave _saveFile,
+            boolean _writefile,
+            String _EXT) {
         verbose = _verbose;
         writefile = _writefile;
-        id = _id;
         fromfile = _fromfile;
         tofile = _tofile;
         encoding = _encoding;
@@ -90,9 +95,7 @@ public class AlignASetOfComparables {
             //if (i==3){
             BiComparable bc = new BiComparable(
                     i,
-                    auto,
                     verbose,
-                    id,
                     fromfile + "/" + name,
                     tofile + "/" + name,
                     "UTF-8",

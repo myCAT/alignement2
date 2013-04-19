@@ -46,6 +46,7 @@ public class LexicalTranslation {
     public LexicalTranslation(String source, String sourceEncoding, float limit) {
         BufferedReader input = null;
         try {
+            System.out.println("LexicalTranslation from :"+source);
             input = new BufferedReader(new InputStreamReader(new FileInputStream(source), sourceEncoding));
 
             Pattern p = Pattern.compile("[\\s]");  // les blancs

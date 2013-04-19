@@ -58,7 +58,7 @@ public class CollectAndSave {
                 countfile++;
                 countline = 0;
                 System.out.println("file:"+countfile);
-                out = new OutputStreamWriter(new FileOutputStream(savefile + "_" + countfile + "txt"), "UTF-8");
+                out = new OutputStreamWriter(new FileOutputStream(savefile + "_" + countfile + ".txt"), "UTF-8");
         }
         countline++;
         //System.out.println("countline:"+countline);

@@ -1,22 +1,24 @@
-/**********
-    Copyright © 2010-2012 Olanto Foundation Geneva
-
-   This file is part of myCAT.
-
-   myCAT is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    myCAT is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    See the GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with myCAT.  If not, see <http://www.gnu.org/licenses/>.
-
-**********/
+/**
+ * ********
+ * Copyright © 2010-2012 Olanto Foundation Geneva
+ *
+ * This file is part of myCAT.
+ *
+ * myCAT is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * myCAT is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with myCAT. If not, see <http://www.gnu.org/licenses/>.
+ *
+ *********
+ */
 package org.olanto.zahir.align.comparable;
 
 import static org.olanto.util.Messages.*;
@@ -53,7 +55,6 @@ import org.olanto.zahir.align.SimInformation;
  */
 public class BiComparable {
 
-    public IdxStructure id;
     public String encoding;
     public String fromfile, tofile, savefile;
     public DocumentSentence fromdoc, todoc;
@@ -65,12 +66,11 @@ public class BiComparable {
     public CollectAndSave saveFile;
     public int countalign, countloop1, iddoc;
     public long counttested;
- 
-    public BiComparable(int iddoc, boolean _auto, boolean _verbose, IdxStructure id, String fromfile, String tofile, String encoding,
+
+    public BiComparable(int iddoc, boolean _verbose, String fromfile, String tofile, String encoding,
             float limit, LexicalTranslation _s2t, CollectAndSave saveFile, boolean writefile) {
         verbose = _verbose;
-        this.id = id;
-       this.iddoc = iddoc;
+        this.iddoc = iddoc;
         this.fromfile = fromfile;
         this.tofile = tofile;
         this.encoding = encoding;
@@ -79,9 +79,9 @@ public class BiComparable {
         s2t = _s2t;
         //msg("open fromfile:"+fromfile);
         fromdoc = new DocumentSentence(fromfile, encoding);
-       fromdoc.convert2id(s2t);
+        fromdoc.convert2id(s2t);
         //msg("open tofile:"+tofile);
-       todoc = new DocumentSentence(tofile, encoding);
+        todoc = new DocumentSentence(tofile, encoding);
         todoc.convert2idWithScore(s2t);
         fromnblines = fromdoc.nblines;
         tonblines = todoc.nblines;
@@ -89,9 +89,8 @@ public class BiComparable {
 
     }
 
-
     public void scanfromGetPair3(float limit) {
-        counttested=0;
+        counttested = 0;
         SimInformation[] resAlign = new SimInformation[fromnblines];
         int[] fromto = new int[fromnblines];
         int[] tofrom = new int[tonblines];
@@ -104,12 +103,14 @@ public class BiComparable {
             maxtofrom[j] = -1;
         }
         for (int i = 0; i < fromnblines; i++) {
-          if (i%1000==0) System.out.println(i);
-              float maxscore = -1;
+//            if (i % 1000 == 0) {
+//                System.out.println(i);
+//            }
+            float maxscore = -1;
             for (int kkk = 0; kkk < tonblines; kkk++) {
-                counttested+=fromdoc.lines[i].iw.length*todoc.lines[kkk].iw.length;
- //               SimInformation sim = new SimInformation(s2t, fromdoc.lines[i].iw, todoc.lines[kkk].iw);
-              SimInformation sim = new SimInformation(fromdoc.lines[i].iw, todoc.lines[kkk].iw,fromdoc.lines[i].id, todoc.lines[kkk].id,todoc.lines[kkk].score, false, s2t);
+                counttested += fromdoc.lines[i].iw.length * todoc.lines[kkk].iw.length;
+                //               SimInformation sim = new SimInformation(s2t, fromdoc.lines[i].iw, todoc.lines[kkk].iw);
+                SimInformation sim = new SimInformation(fromdoc.lines[i].iw, todoc.lines[kkk].iw, fromdoc.lines[i].id, todoc.lines[kkk].id, todoc.lines[kkk].score, false, s2t);
 //                if (iddoc==13 &&sim.similarity >0)
 //                    System.out.println("i:"+i+ "j:"+kkk+" sim:"+sim.similarity + " ; " + sim.countIdent + ";" + sim.countNoIdent);
                 if (sim.countNoIdent >= 2 && sim.similarity > maxscore) {
@@ -147,9 +148,11 @@ public class BiComparable {
     public String getInformation() {
         return fromfile + "\t#line:\t" + fromnblines + "\tTo:\t" + tofile + "\t#line:\t" + tonblines + "\tOne-one:\t" + countTMX + "\t-\t" + (countTMX * 100) / Math.min(fromnblines, tonblines) + "\t%";
     }
-    {Global.REDUCE=true;
-    Global.NUMBERS=false;
-    Global.NUMBERS=true;
-    Global.TEST_IDENT_LIMIT=2;
+
+    {
+        Global.REDUCE = true;
+        Global.NUMBERS = false;
+        Global.NUMBERS = true;
+        Global.TEST_IDENT_LIMIT = 2;
     }
 }
