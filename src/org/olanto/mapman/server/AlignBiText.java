@@ -104,7 +104,7 @@ public class AlignBiText {
             if (docpivot != -1) { // existe un docpivot
                 //System.out.println(" doc id :"+docso);
                 map = ms.getMap(docpivot, langso, langta);
-                if (skipLine) {
+                if (map!=null&skipLine) {
                     // map.dump("before skip");
                     map = map.skipLine();  // remap with empty line
                     //map.dump("after skip");
