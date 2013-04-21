@@ -122,7 +122,7 @@ public class AlignBiText {
             Logger.getLogger(AlignBiText.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-       // dump();
+        // dump();
 
     }
 
