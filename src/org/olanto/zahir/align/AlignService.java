@@ -20,10 +20,8 @@
 
 package org.olanto.zahir.align;
 
-import org.olanto.idxvli.*;
-import org.olanto.util.Timer;
-import org.olanto.mapman.mapper.ConfigurationIDX_dummy;
 import org.olanto.mapman.server.IntMap;
+import org.olanto.util.Timer;
 
 /** Exemple d'initialisation d'un appel a alignement
  *  

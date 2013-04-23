@@ -104,7 +104,7 @@ public class AlignBiText {
             if (docpivot != -1) { // existe un docpivot
                 //System.out.println(" doc id :"+docso);
                 map = ms.getMap(docpivot, langso, langta);
-                if (map!=null&skipLine) {
+                if (map != null & skipLine) {
                     // map.dump("before skip");
                     map = map.skipLine();  // remap with empty line
                     //map.dump("after skip");
@@ -140,44 +140,26 @@ public class AlignBiText {
 // Matrice (nombre de lignes, position du top, correction, position en pixel)
 
     public static int[][] getLineStat(String[] lines, int w, int h, int length) {
-        int ncal = 0;
         int[][] calc = new int[lines.length][5];
-        if ((lines[0].length() / w) <= 1) {
-            ncal++;
-        }
-        calc[0][0] = (lines[0].length() / w) + 1;// nombre de lignes dans la textarea de la phrase courante
+        int curLines;
+
+        curLines = getLineNumbers(lines[0], w, " ");
+        calc[0][0] = curLines;// nombre de lignes dans la textarea de la phrase courante
         calc[0][1] = 0;// position du curseur pour la phrase courante dans la textarea
         calc[0][2] = 0;// correction pour la position du curseur pour IE afin de mettre au milieu la phrase
         calc[0][3] = 0;// nombre de lignes avant la phrase courante
-        calc[0][4] = ncal;// nombre de phrases comportant une seule ligne avant la phrase courante
-
-
-        float lin2 = 0, lin4 = 0;
-        int pos = 0, len = 0, corr = 0, lin1 = 0, lin = 0, j = 0, lin3 = 0, ln = 0;
-
+        int pos = 0, corr, j, ln;
+//        System.out.println("total line numbers: " + lines.length);
         for (int i = 1; i < lines.length; i++) {
-            if (lines[i - 1].length() == 0) {
-                lin1++;
-            } else {
-                lin1 += (lines[i - 1].length() / w);
-            }
-
-            lin3 = (lines[i - 1].length() / w);
-            lin2 = (float) lines[i - 1].length() / (float) w;
-            lin4 = lin2 - lin3;
-            lin1 = lin4 > 0f ? lin1 + 1 : lin1;
-
-            len = lines[i].length();
+//            System.out.println("treating line :" + i);
             //ajouter et simuler le comportement du contenu dans un textArea.
             pos += lines[i - 1].length() + 1;
-            lin = (len / w) + 1;
-            if (lin == 1) {
-                ncal++;
-            }
-            calc[i][0] = lin;
+            curLines = getLineNumbers(lines[i], w, " ");
+
+            calc[i][0] = curLines;// nombre de lignes dans la textarea de la phrase courante
             calc[i][1] = pos;
-            calc[i][3] = lin1;
-            calc[i][4] = ncal;
+            calc[i][3] = calc[i - 1][0] + calc[i - 1][3]; // nombre de lignes avant la phrase courante
+//            System.out.println("lines before " + i + " :" + calc[i][3] + " line height " + i + " :" + calc[i][0]);
         }
 
         for (int i = 1; i < lines.length; i++) {
@@ -208,5 +190,81 @@ public class AlignBiText {
             }
         }
         return calc;
+    }
+
+    public static int getLineNumbers(String line, int taWidth, String Split) {
+        int curLine = 0;
+
+        // if line length is strictly less than the textarea width it means that
+        // the line will stand only on one row in the textarea
+        if (line.length() <= taWidth) {
+            return 1;
+        }
+//        System.out.println("start split");
+        // get all the words in the line
+        int count;
+        if (line.startsWith(Split)) {
+            count = 1;
+        } else {
+            count = 0;
+        }
+        String[] words = line.split(Split);
+
+        // calculate the sum of the word length one by one if it is still under
+        // the textarea width it means it is still a line 
+        if (words != null) {
+            int i = 0, stay = 0;
+//            System.out.println("start calculating for words length :" + words.length);
+            while ((i < words.length)) {
+//                System.out.println("treating word :" + i);
+                // add the characters of the current word and the space
+                if (i == words.length - 1) {
+                    count += words[i].length();
+                } else {
+                    count += words[i].length() + 1;
+                }
+                if ((words[i].startsWith(".."))) {
+                    if (i > 0) {
+                        count += words[i - 1].length() + 3;
+                    }
+                }
+                if (count < taWidth) {
+                    i++;
+                    stay = 0;
+                } else if (count == taWidth) {
+                    curLine++;
+                    count = 0;
+                    i++;
+                    stay = 0;
+                } else if (words[i].length() >= taWidth) {
+                    if ((words[i].startsWith(".."))) {
+                        if (i > 0) {
+                            count += words[i - 1].length() + 3;
+                        }
+                    }
+                    while (count >= taWidth) {
+                        curLine++;
+                        count -= taWidth;
+                    }
+                    i++;
+                    stay = 0;
+                } else if (count > taWidth) {
+                    curLine++;
+                    count = 0;
+                    stay++;
+                }
+                if (stay > 1) {
+                    curLine++;
+                    i++;
+                }
+            }
+            if (count > 0) {
+                curLine++;
+            }
+//            System.out.println("end calculating");
+        } else {
+            curLine = 2;
+        }
+        return curLine;
     }
 }
