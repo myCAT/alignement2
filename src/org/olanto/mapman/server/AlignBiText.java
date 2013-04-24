@@ -213,49 +213,67 @@ public class AlignBiText {
         // calculate the sum of the word length one by one if it is still under
         // the textarea width it means it is still a line 
         if (words != null) {
-            int i = 0, stay = 0;
+            int i = 0, stay = 0, idx;
+            String rest;
 //            System.out.println("start calculating for words length :" + words.length);
-            while ((i < words.length)) {
+            while (i < words.length) {
 //                System.out.println("treating word :" + i);
                 // add the characters of the current word and the space
-                if (i == words.length - 1) {
-                    count += words[i].length();
-                } else {
-                    count += words[i].length() + 1;
-                }
-                if ((words[i].startsWith(".."))) {
-                    if (i > 0) {
-                        count += words[i - 1].length() + 3;
+                if ((words[i].contains("-")) && ((count + words[i].length() + 1) >= taWidth)) {
+                    rest = words[i];
+                    idx = 0;
+                    while ((rest.contains("-")) && (count <= taWidth)) {
+                        idx = rest.indexOf("-") + 1;
+                        if (idx < rest.length() - 1) {
+                            rest = rest.substring(idx);
+                        } else {
+                            rest = "";
+                        }
+                        count += idx;
                     }
-                }
-                if (count < taWidth) {
-                    i++;
-                    stay = 0;
-                } else if (count == taWidth) {
                     curLine++;
-                    count = 0;
+                    count = words[i].substring(idx).length() + 1;
                     i++;
-                    stay = 0;
-                } else if (words[i].length() >= taWidth) {
+                } else {
+                    if (i == words.length - 1) {
+                        count += words[i].length();
+                    } else {
+                        count += words[i].length() + 1;
+                    }
                     if ((words[i].startsWith(".."))) {
                         if (i > 0) {
                             count += words[i - 1].length() + 3;
                         }
                     }
-                    while (count >= taWidth) {
+                    if (count < taWidth) {
+                        i++;
+                        stay = 0;
+                    } else if (count == taWidth) {
                         curLine++;
-                        count -= taWidth;
+                        count = 0;
+                        i++;
+                        stay = 0;
+                    } else if (words[i].length() >= taWidth) {
+                        if ((words[i].startsWith(".."))) {
+                            if (i > 0) {
+                                count += words[i - 1].length() + 3;
+                            }
+                        }
+                        while (count >= taWidth) {
+                            curLine++;
+                            count -= taWidth;
+                        }
+                        i++;
+                        stay = 0;
+                    } else if (count > taWidth) {
+                        curLine++;
+                        count = 0;
+                        stay++;
                     }
-                    i++;
-                    stay = 0;
-                } else if (count > taWidth) {
-                    curLine++;
-                    count = 0;
-                    stay++;
-                }
-                if (stay > 1) {
-                    curLine++;
-                    i++;
+                    if (stay > 1) {
+                        curLine++;
+                        i++;
+                    }
                 }
             }
             if (count > 0) {
