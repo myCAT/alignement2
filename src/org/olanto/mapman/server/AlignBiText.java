@@ -25,6 +25,7 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.olanto.idxvli.server.IndexService_MyCat;
+import org.olanto.util.Timer;
 
 /**
  * classe pour l'alignement de bitext.
@@ -90,7 +91,9 @@ public class AlignBiText {
             System.out.println("no source file");
             return; //stop processing
         }
+        Timer t = new Timer("GetLineStat_Source");
         source.positions = getLineStat(source.lines, w, h, source.content.length());
+        t.stop();
         target = new SegDoc(fileta, langta);
         if (target.lines[1] != null && target.lines[1].startsWith("*** ERROR")) {
             System.out.println("no target file");
@@ -240,9 +243,18 @@ public class AlignBiText {
                     } else {
                         count += words[i].length() + 1;
                     }
-                    if ((words[i].startsWith(".."))) {
+                    if ((words[i].startsWith("...."))) {
+                        count = words[i].length() + 1;
+                        
                         if (i > 0) {
-                            count += words[i - 1].length() + 3;
+                            count += words[i - 1].length() + 1;
+                        }
+                        if (i > 1) {
+                            curLine++;
+                        }
+                        while (count >= taWidth) {
+                            curLine++;
+                            count -= taWidth;
                         }
                     }
                     if (count < taWidth) {
@@ -251,18 +263,6 @@ public class AlignBiText {
                     } else if (count == taWidth) {
                         curLine++;
                         count = 0;
-                        i++;
-                        stay = 0;
-                    } else if (words[i].length() >= taWidth) {
-                        if ((words[i].startsWith(".."))) {
-                            if (i > 0) {
-                                count += words[i - 1].length() + 3;
-                            }
-                        }
-                        while (count >= taWidth) {
-                            curLine++;
-                            count -= taWidth;
-                        }
                         i++;
                         stay = 0;
                     } else if (count > taWidth) {
