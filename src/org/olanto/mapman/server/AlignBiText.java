@@ -222,10 +222,10 @@ public class AlignBiText {
             while (i < words.length) {
 //                System.out.println("treating word :" + i);
                 // add the characters of the current word and the space
-                if ((words[i].contains("-")) && ((count + words[i].length() + 1) >= taWidth)) {
+                if ((words[i].contains("-")) && ((count + words[i].length() + 1) > taWidth)) {
                     rest = words[i];
                     idx = 0;
-                    while ((rest.contains("-")) && (count <= taWidth)) {
+                    while ((rest.contains("-")) && (count < taWidth)) {
                         idx = rest.indexOf("-") + 1;
                         if (idx < rest.length() - 1) {
                             rest = rest.substring(idx);
@@ -244,10 +244,9 @@ public class AlignBiText {
                         count += words[i].length() + 1;
                     }
                     if ((words[i].startsWith("...."))) {
-                        count = words[i].length() + 1;
-                        
+                        count = words[i].length();
                         if (i > 0) {
-                            count += words[i - 1].length() + 1;
+                            count += words[i - 1].length();
                         }
                         if (i > 1) {
                             curLine++;
