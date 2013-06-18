@@ -56,6 +56,34 @@ public class BiSentence {
     public long counttested;
     static boolean fatalError = false;
 
+       /** read content from file*/
+    public BiSentence(
+            boolean _auto, // taille automatique de la fenÃªtre d'exploration
+            int autopct, // en pour cent de la taille du document (4%)
+            int minauto, // minimum taille en mode auto
+            boolean _verbose,
+    //        IdxStructure id,
+            String fromContent,
+            String toContent,
+            int windows, // taille manuelle du premier passage (ou maximum si auto)
+            int windows2, // taille manuelle du deuxiÃ¨me passage
+            LexicalTranslation _s2t) {
+        verbose = _verbose;
+     //   this.id = id;
+        this.fromfile = "source get from zipcache";
+        this.tofile = "target get from zipcache";
+        this.windows = windows;
+        this.windows2 = windows2;
+        this.autopct = autopct;
+        this.minauto = minauto;
+        this.encoding = "not used";
+        s2t = _s2t;
+        fromdoc = new DocumentSentence(fromContent);
+          todoc = new DocumentSentence(toContent);
+          computeAlignement(_auto);
+    }
+    
+    /** read content from file*/
     public BiSentence(
             boolean _auto, // taille automatique de la fenÃªtre d'exploration
             int autopct, // en pour cent de la taille du document (4%)
@@ -79,9 +107,13 @@ public class BiSentence {
         this.encoding = encoding;
         s2t = _s2t;
         fromdoc = new DocumentSentence(fromfile, encoding);
-        fromdoc.sumNumbers();  // pour l'ajustement de la fenÃªtre
+          todoc = new DocumentSentence(tofile, encoding);
+          computeAlignement(_auto);
+    }
+    
+    private void computeAlignement(boolean _auto){
+      fromdoc.sumNumbers();  // pour l'ajustement de la fenÃªtre
         fromdoc.convert2id(s2t);
-        todoc = new DocumentSentence(tofile, encoding);
         todoc.convert2idWithScore(s2t);
         fromnblines = fromdoc.nblines;
         tonblines = todoc.nblines;

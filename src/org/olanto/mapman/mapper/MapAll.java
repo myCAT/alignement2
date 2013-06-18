@@ -1,22 +1,24 @@
-/**********
-Copyright © 2010-2012 Olanto Foundation Geneva
-
-This file is part of myCAT.
-
-myCAT is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-myCAT is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with myCAT.  If not, see <http://www.gnu.org/licenses/>.
-
- **********/
+/**
+ * ********
+ * Copyright © 2010-2012 Olanto Foundation Geneva
+ *
+ * This file is part of myCAT.
+ *
+ * myCAT is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * myCAT is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with myCAT. If not, see <http://www.gnu.org/licenses/>.
+ *
+ *********
+ */
 package org.olanto.mapman.mapper;
 
 import org.olanto.idxvli.IdxStructure;
@@ -34,17 +36,18 @@ import org.olanto.mapman.server.GetMapService;
 import org.olanto.mapman.server.IntMap;
 import org.olanto.mapman.server.MapService;
 import org.olanto.senseos.SenseOS;
+import static org.olanto.mapman.MapArchiveConstant.*;
 
 /**
  * Classe pour la mise à jour des maps.
- * 
+ *
  */
 public class MapAll {
 
     static IndexService_MyCat is;
     static String rootTxt;
     //private static IdxStructure id;
-   // private static Timer t1 = new Timer("global time");
+    // private static Timer t1 = new Timer("global time");
     private static BiSentence d;
     static MapService ms;
 
@@ -58,7 +61,7 @@ public class MapAll {
             e.printStackTrace();
         }
 
-      //  t1.stop();
+        //  t1.stop();
 
     }
 
@@ -68,8 +71,8 @@ public class MapAll {
 
         //
         try {
-         //   id = new IdxStructure(); // indexeur vide
-         //   id.initComponent(new ConfigurationIDX_dummy()); // pour initialiser le parseur ...
+            //   id = new IdxStructure(); // indexeur vide
+            //   id.initComponent(new ConfigurationIDX_dummy()); // pour initialiser le parseur ...
             System.out.println("connect to serveur");
 
 
@@ -97,7 +100,7 @@ public class MapAll {
             e.printStackTrace();
         }
 
-    //    t1.stop();
+        //    t1.stop();
 
     }
 
@@ -112,7 +115,7 @@ public class MapAll {
             SetOfBits targetLanguage = is.satisfyThisProperty("TARGET." + target);
             LexicalTranslation s2t = null;
             try {
-                s2t = new LexicalTranslation(SenseOS.getMYCAT_HOME()+"/map/" + source + target + "/lex.e2f", "UTF-8", 0.1f);
+                s2t = new LexicalTranslation(SenseOS.getMYCAT_HOME() + "/map/" + source + target + "/lex.e2f", "UTF-8", 0.1f);
             } catch (Exception ex) {
                 System.out.println(" !!! no Dictionnary from " + source + " to " + target);
                 return;  // quitte sans faire de map
@@ -123,7 +126,13 @@ public class MapAll {
                         // existe pas de carte
                         String pivotName = is.getDocName(i);
                         String targetName = getNameOfDocForThisLang(pivotName, target);
-                        d = new BiSentence(true, 5, 10, false, pivotName, targetName, "UTF-8", 200, 3, s2t);
+                        if (GET_TXT_FROM_ZIP_CACHE) { // par le zip
+                            String fromContent=is.getDoc(i);
+                            String toContent=is.getDoc(is.getDocId(targetName));
+                            d = new BiSentence(true, 5, 10, false, fromContent, toContent , 200, 3, s2t);
+                        } else { // par les fichiers
+                            d = new BiSentence(true, 5, 10, false, pivotName, targetName, "UTF-8", 200, 3, s2t);
+                        }
                         ms.addMap(new IntMap(d.buildIntegerMapSO2TA(), d.buildIntegerMapTA2SO()), i, source, target);
                         newmap++;
                     } else {
