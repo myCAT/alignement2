@@ -146,6 +146,10 @@ public class MapArchiveConstant {//extends org.olanto.idxvli.IdxConstant {
      * Skip a line between paragraphs
      */
     public static boolean SKIP_LINE = false;
+  /**
+     * get txt from zip_cache (IDX_ZIP_CACHE must be set to true
+     */
+    public static boolean GET_TXT_FROM_ZIP_CACHE = false;
    /**
      * compression des object storage
      */
