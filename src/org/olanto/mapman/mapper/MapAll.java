@@ -24,6 +24,8 @@ package org.olanto.mapman.mapper;
 import org.olanto.idxvli.IdxStructure;
 import org.olanto.idxvli.doc.PropertiesList;
 import java.rmi.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.olanto.idxvli.server.*;
 import org.olanto.idxvli.util.SetOfBits;
 import org.olanto.util.Timer;
@@ -37,6 +39,7 @@ import org.olanto.mapman.server.IntMap;
 import org.olanto.mapman.server.MapService;
 import org.olanto.senseos.SenseOS;
 import static org.olanto.mapman.MapArchiveConstant.*;
+import org.olanto.zahir.parallel.runable.RunableProcess;
 
 /**
  * Classe pour la mise à jour des maps.
@@ -66,8 +69,52 @@ public class MapAll {
     }
 
     public static void updateMap(MapService _ms) {
-
         ms = _ms;
+        //   updateMapSEQ();
+        updateMapPAR();
+    }
+
+    public static void updateMapPAR() {
+        try {
+            System.out.println("connect to serveur");
+            is = org.olanto.conman.server.GetContentService.getServiceMYCAT("rmi://localhost/VLI");
+            msg("properties lang before update: ");
+            inventoryOf();
+            
+            String[] setOfLang = is.getCorpusLanguages();  // langues du corpus
+            for (int i = 1; i < setOfLang.length; i++) {
+                msg("\nbuild maps for: " + setOfLang[i]);
+                MapProcess.init(is, ms, setOfLang[0], setOfLang[i]);  // to init static
+                ExecutorService executor = Executors.newFixedThreadPool(8);  // nb proc could be put into a parameters
+                int lastdoc = is.getSize();
+                for (int idDoc = 0; idDoc < lastdoc; idDoc++) {
+                    MapProcess mp = new MapProcess(idDoc);
+                    executor.execute(mp);
+                }
+                // This will make the executor accept no new threads
+                // and finish all existing threads in the queue
+                executor.shutdown();
+                // Wait until all threads are finish
+                while (!executor.isTerminated()) {
+                }
+                System.out.println("Finished all threads");
+                MapProcess.statistic();
+            }
+            msg("properties lang after update: ");
+            inventoryOf();
+            System.out.println(".");
+            msg("End build Map ...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //    t1.stop();
+
+    }
+
+    public static void updateMapSEQ() {
+
+
 
         //
         try {
@@ -86,6 +133,8 @@ public class MapAll {
             for (int i = 1; i < setOfLang.length; i++) {
                 msg("\nbuild maps for: " + setOfLang[i]);
                 createMap(setOfLang[0], setOfLang[i]);
+
+
             }
             msg("properties lang after update: ");
             inventoryOf();
@@ -127,9 +176,9 @@ public class MapAll {
                         String pivotName = is.getDocName(i);
                         String targetName = getNameOfDocForThisLang(pivotName, target);
                         if (GET_TXT_FROM_ZIP_CACHE) { // par le zip
-                            String fromContent=is.getDoc(i);
-                            String toContent=is.getDoc(is.getDocId(targetName));
-                            d = new BiSentence(true, 5, 10, false, fromContent, toContent , 200, 3, s2t);
+                            String fromContent = is.getDoc(i);
+                            String toContent = is.getDoc(is.getDocId(targetName));
+                            d = new BiSentence(true, 5, 10, false, fromContent, toContent, 200, 3, s2t);
                         } else { // par les fichiers
                             d = new BiSentence(true, 5, 10, false, pivotName, targetName, "UTF-8", 200, 3, s2t);
                         }
